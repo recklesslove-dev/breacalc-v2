@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<link rel="apple-touch-icon" href="https://pub-8f4e8ec913b14abe86e5a3cb912c4b6a.r2.dev/brea-logo.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brea Calc</title>
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Brea Calc">
+  <meta name="theme-color" content="#0f1117">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --accent: #4f9cf9;
+      --accent2: #f97316;
+      --green: #22c55e;
+      --red: #ef4444;
+      --purple: #a78bfa;
+      --yellow: #facc15;
+      --teal: #2dd4bf;
+      --text: #e8eaf0;
+      --muted: #6b7280;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0 0 60px;
+    }
+    .tab-bar {
+      display: flex;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 14px 8px;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+      letter-spacing: 0.05em;
+    }
+    .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .page { display: none; padding: 16px; }
+    .page.active { display: block; }
+    .logo-header {
+      text-align: center;
+      padding: 18px 16px 12px;
+      background: #fff;
+      border-bottom: 3px solid #111;
+    }
+    .logo-header img {
+      max-width: 280px;
+      width: 90%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    .logo-header p {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: #555;
+      margin-top: 6px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .section-header {
+      text-align: center;
+      padding: 16px 0 10px;
+    }
+    .section-header h1 {
+      font-family: 'DM Mono', monospace;
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+    }
+    .section-header p {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+      font-family: 'DM Mono', monospace;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+    .card-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+      font-family: 'DM Mono', monospace;
+    }
+    .field { margin-bottom: 13px; }
+    .field:last-child { margin-bottom: 0; }
+    label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 5px; font-weight: 500; }
+    input[type="text"], input[type="number"], input[type="date"] {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 16px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+    input:focus { border-color: var(--accent); }
+    input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.6); }
+    .prefix-wrap { position: relative; }
+    .prefix-wrap span { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 15px; pointer-events: none; }
+    .prefix-wrap input { padding-left: 28px; }
+    .suffix-wrap { position: relative; }
+    .suffix-wrap span { position: absolute; right: 13px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 14px; pointer-events: none; }
+    .suffix-wrap input { padding-right: 38px; }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .calc-btn {
+      width: 100%; background: var(--accent); color: #fff; border: none;
+      border-radius: var(--radius); padding: 16px; font-size: 17px; font-weight: 700;
+      font-family: 'DM Sans', sans-serif; cursor: pointer; margin-top: 4px;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .calc-btn:active { transform: scale(0.98); opacity: 0.9; }
+    .result-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .result-header h2 { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; color: var(--accent); }
+    .badge { font-family: 'DM Mono', monospace; font-size: 11px; background: var(--surface2); border: 1px solid var(--border); padding: 4px 10px; border-radius: 99px; color: var(--muted); }
+    .result-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .result-row:last-child { border-bottom: none; }
+    .result-row .rkey { color: var(--muted); }
+    .result-row .rval { font-family: 'DM Mono', monospace; font-weight: 500; font-size: 14px; }
+    .result-row.big { padding: 12px 0; }
+    .result-row.big .rkey { font-weight: 700; font-size: 14px; color: var(--text); }
+    .result-row.big .rval { font-size: 17px; }
+    .c-orange { color: var(--accent2); } .c-purple { color: var(--purple); }
+    .c-red { color: var(--red); } .c-green { color: var(--green); }
+    .c-teal { color: var(--teal); } .c-yellow { color: var(--yellow); }
+    .divider { height: 1px; background: var(--border); margin: 6px 0; }
+    .reset-btn {
+      width: 100%; background: transparent; border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 13px; font-size: 14px; color: var(--muted);
+      font-family: 'DM Sans', sans-serif; cursor: pointer; margin-top: 4px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .reset-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .settings-label { font-size: 13px; color: var(--muted); margin-bottom: 14px; line-height: 1.6; }
+    .save-btn {
+      width: 100%; background: var(--green); color: #0f1117; border: none;
+      border-radius: var(--radius); padding: 14px; font-size: 16px; font-weight: 700;
+      font-family: 'DM Sans', sans-serif; cursor: pointer; margin-top: 6px; transition: opacity 0.15s;
+    }
+    .save-btn:active { opacity: 0.85; }
+    .saved-toast { text-align: center; font-size: 13px; color: var(--green); font-family: 'DM Mono', monospace; margin-top: 10px; opacity: 0; transition: opacity 0.3s; }
+    .saved-toast.show { opacity: 1; }
+    .rate-display {
+      background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
+      padding: 12px 14px; font-family: 'DM Mono', monospace; font-size: 15px; color: var(--accent);
+      margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .rate-display:last-child { margin-bottom: 0; }
+    .rate-display span { color: var(--muted); font-size: 12px; }
+
+```
+.app-footer {
+  text-align: center; padding: 24px 16px 12px; font-size: 12px;
+  color: var(--muted); font-family: 'DM Mono', monospace; letter-spacing: 0.04em;
+}
+.app-footer strong { color: var(--accent); }
+
+/* ── CARD TAB ── */
+#tab-card { background: var(--bg); padding: 8px; }
+.card-hint { text-align: center; font-size: 10px; color: var(--muted); font-family: 'DM Mono', monospace; letter-spacing: 0.06em; padding: 4px 0 3px; }
+.snap-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; margin: 0 0 10px; overflow: hidden;
+}
+.snap-header { background: #fff; padding: 14px 18px 10px; text-align: center; border-bottom: 3px solid #111; }
+.snap-header img { max-width: 200px; width: 80%; height: auto; display: block; margin: 0 auto; }
+.snap-header-meta { display: flex; justify-content: space-between; align-items: center; padding: 7px 14px 4px; }
+.snap-meta-block { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); line-height: 1.5; }
+.snap-meta-block span { color: var(--text); font-weight: 500; }
+.snap-invoice-badge { font-family: 'DM Mono', monospace; font-size: 11px; background: var(--surface2); border: 1px solid var(--border); padding: 4px 10px; border-radius: 99px; color: var(--muted); align-self: flex-start; }
+.snap-highlights { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border-top: 1px solid var(--border); }
+.snap-stat { background: var(--surface2); padding: 9px 8px; text-align: center; }
+.snap-stat .s-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+.snap-stat .s-val { font-family: 'DM Mono', monospace; font-size: 17px; font-weight: 500; line-height: 1.1; }
+.snap-stat .s-val.small { font-size: 15px; }
+.snap-divider-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); padding: 6px 14px 2px; }
+.snap-rows { padding: 0 14px 6px; }
+.snap-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid var(--border); font-size: 11px; }
+.snap-row:last-child { border-bottom: none; }
+.snap-row .sr-key { color: var(--muted); font-size: 11px; }
+.snap-row .sr-val { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text); }
+.snap-row.sr-big .sr-key { color: var(--text); font-weight: 700; font-size: 12px; }
+.snap-row.sr-big .sr-val { font-size: 13px; }
+.snap-footer-bar { background: #111; padding: 5px 14px; display: flex; justify-content: space-between; align-items: center; }
+.snap-footer-bar span { font-family: 'DM Mono', monospace; font-size: 10px; color: #666; letter-spacing: 0.06em; }
+.snap-footer-bar strong { color: var(--accent); }
+.card-empty { text-align: center; color: var(--muted); font-size: 14px; padding: 40px 20px; }
+```
+
+  </style>
+</head>
+<body>
+
+<div class="logo-header">
+  <img src="https://pub-8f4e8ec913b14abe86e5a3cb912c4b6a.r2.dev/brea-logo.jpeg" alt="Brea/Orange County Plumbing, Heating & Air Conditioning">
+  <p>Job Breakdown Calculator</p>
+</div>
+
+<div class="tab-bar">
+  <button class="tab-btn active" id="btn-calc" onclick="showTab('calc',0)">CALC</button>
+  <button class="tab-btn" id="btn-results" onclick="showTab('results',1)">RESULTS</button>
+  <button class="tab-btn" id="btn-card" onclick="showTab('card',2)">📸 CARD</button>
+  <button class="tab-btn" id="btn-settings" onclick="showTab('settings',3)">⚙</button>
+</div>
+
+<!-- CALCULATOR -->
+
+<div class="page active" id="tab-calc">
+  <div class="section-header">
+    <h1>// BREAKDOWN CALC</h1>
+    <p>Job cost & commission calculator</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Job Info</div>
+    <div class="field"><label>Customer Name</label><input type="text" id="customerName" placeholder="e.g. John Smith"></div>
+    <div class="row-2">
+      <div class="field"><label>Invoice #</label><input type="text" id="invoiceNumber" placeholder="INV-001"></div>
+      <div class="field"><label>Date</label><input type="date" id="date"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Labor</div>
+    <div class="row-2">
+      <div class="field"><label>Tech Hrs ($140/hr)</label><div class="suffix-wrap"><input type="number" id="techHours" placeholder="0" step="0.1" min="0"><span>hr</span></div></div>
+      <div class="field"><label>Helper Hrs ($50/hr)</label><div class="suffix-wrap"><input type="number" id="helperHours" placeholder="0" step="0.1" min="0"><span>hr</span></div></div>
+    </div>
+    <div class="row-2">
+      <div class="field"><label>Prev. Wage ($185/hr)</label><div class="suffix-wrap"><input type="number" id="prevailingHours" placeholder="0" step="0.1" min="0"><span>hr</span></div></div>
+      <div class="field"><label>Proposal Hrs ($140/hr)</label><div class="suffix-wrap"><input type="number" id="proposalHours" placeholder="0" step="0.1" min="0"><span>hr</span></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Materials</div>
+    <div class="row-2">
+      <div class="field"><label>Material Cost</label><div class="prefix-wrap"><span>$</span><input type="number" id="materialCost" placeholder="0.00" step="0.01" min="0"></div></div>
+      <div class="field"><label>Tax Rate</label><div class="suffix-wrap"><input type="number" id="taxRate" placeholder="0.00" step="0.01" min="0"><span>%</span></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Other Charges</div>
+    <div class="row-2">
+      <div class="field"><label>TOC Charge</label><div class="prefix-wrap"><span>$</span><input type="number" id="tocCharge" placeholder="0.00" step="0.01" min="0"></div></div>
+      <div class="field"><label>Permits</label><div class="prefix-wrap"><span>$</span><input type="number" id="permits" placeholder="0.00" step="0.01" min="0"></div></div>
+    </div>
+    <div class="field"><label>Equipment</label><div class="prefix-wrap"><span>$</span><input type="number" id="equipment" placeholder="0.00" step="0.01" min="0"></div></div>
+    <div class="field"><label>Subcontractor 1</label><div class="prefix-wrap"><span>$</span><input type="number" id="sub1Charge" placeholder="0.00" step="0.01" min="0"></div></div>
+    <div class="field"><label>Subcontractor 2</label><div class="prefix-wrap"><span>$</span><input type="number" id="sub2Charge" placeholder="0.00" step="0.01" min="0"></div></div>
+    <div class="field"><label>Subcontractor 3</label><div class="prefix-wrap"><span>$</span><input type="number" id="sub3Charge" placeholder="0.00" step="0.01" min="0"></div></div>
+  </div>
+  <button class="calc-btn" onclick="calculate()">Calculate Breakdown</button>
+</div>
+
+<!-- RESULTS -->
+
+<div class="page" id="tab-results">
+  <div class="section-header">
+    <h1>// RESULTS</h1>
+    <p id="resultsSubtitle">No calculation yet</p>
+  </div>
+  <div id="resultsEmpty" class="card" style="text-align:center;color:var(--muted);font-size:14px;padding:30px;">
+    Fill out the calculator and tap<br><strong style="color:var(--accent)">Calculate Breakdown</strong><br>to see results here.
+  </div>
+  <div id="resultsContent" style="display:none;">
+    <div class="card">
+      <div class="result-header"><h2>JOB SUMMARY</h2><span class="badge" id="badgeInvoice">#---</span></div>
+      <div class="result-row"><span class="rkey">Customer</span><span class="rval" id="rCustomer">—</span></div>
+      <div class="result-row"><span class="rkey">Date</span><span class="rval" id="rDate">—</span></div>
+      <div class="result-row"><span class="rkey">Markup Applied</span><span class="rval c-purple" id="rMarkupUsed">35%</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Labor</div>
+      <div class="result-row"><span class="rkey">Tech Pay (×$140)</span><span class="rval" id="rTechPay">$0.00</span></div>
+      <div class="result-row"><span class="rkey">Helper Pay (×$50)</span><span class="rval" id="rHelperPay">$0.00</span></div>
+      <div class="result-row"><span class="rkey">Prevailing Wage (×$185)</span><span class="rval" id="rPrevailingPay">$0.00</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Materials</div>
+      <div class="result-row"><span class="rkey">Material Cost</span><span class="rval" id="rMaterialCost">$0.00</span></div>
+      <div class="result-row"><span class="rkey">Material Tax</span><span class="rval" id="rMaterialTax">$0.00</span></div>
+      <div class="result-row"><span class="rkey">Total Materials</span><span class="rval" id="rTotalMaterial">$0.00</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Other Charges</div>
+      <div class="result-row"><span class="rkey">TOC Charge</span><span class="rval" id="rToc">$0.00</span></div>
+      <div class="result-row"><span class="rkey">Permits</span><span class="rval" id="rPermits">$0.00</span></div>
+      <div class="result-row"><span class="rkey">Equipment</span><span class="rval" id="rEquipment">$0.00</span></div>
+      <div class="result-row"><span class="rkey">Subcontractor 1</span><span class="rval" id="rSub1">$0.00</span></div>
+      <div class="result-row"><span class="rkey">Subcontractor 2</span><span class="rval" id="rSub2">$0.00</span></div>
+      <div class="result-row"><span class="rkey">Subcontractor 3</span><span class="rval" id="rSub3">$0.00</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Totals</div>
+      <div class="result-row big"><span class="rkey">Subtotal</span><span class="rval c-orange" id="rSubtotal">$0.00</span></div>
+      <div class="result-row big"><span class="rkey" id="rTotalJobLabel">Total Job (+35%)</span><span class="rval c-purple" id="rTotalJob">$0.00</span></div>
+      <div class="result-row"><span class="rkey">Proposal Hours Cost</span><span class="rval c-teal" id="rProposalCost">$0.00</span></div>
+      <div class="divider"></div>
+      <div class="result-row big"><span class="rkey">Complete Total</span><span class="rval c-red" id="rCompleteTotal">$0.00</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Profit & Commission</div>
+      <div class="result-row big"><span class="rkey">Profit</span><span class="rval c-green" id="rProfit">$0.00</span></div>
+      <div class="result-row big"><span class="rkey" id="rCommissionLabel">Commission (15.0%)</span><span class="rval c-yellow" id="rCommission">$0.00</span></div>
+    </div>
+    <button class="reset-btn" onclick="resetCalc()">← New Calculation</button>
+    <button class="reset-btn" onclick="goToCard()" style="background:var(--accent2);color:#fff;border-color:var(--accent2);margin-top:10px;">📸 View Screenshot Card</button>
+
+  </div>
+</div>
+
+<!-- CARD -->
+
+<div class="page" id="tab-card">
+  <p class="card-hint">SCREENSHOT THIS PAGE · ZOOM IN TO FILL SCREEN</p>
+  <div id="cardEmpty" class="card-empty">
+    Run a calculation first, then come back here to screenshot your results.
+  </div>
+  <div id="cardContent" style="display:none;">
+    <div class="snap-card">
+      <div class="snap-header-meta">
+        <div class="snap-meta-block">
+          Customer<br><span id="cCustomer">—</span><br>
+          Date<br><span id="cDate">—</span>
+        </div>
+        <div class="snap-invoice-badge" id="cInvoice">#---</div>
+      </div>
+      <!-- 4 highlight stats -->
+      <div class="snap-highlights">
+        <div class="snap-stat">
+          <div class="s-label">Complete Total</div>
+          <div class="s-val c-red small" id="cCompleteTotal">$0.00</div>
+        </div>
+        <div class="snap-stat">
+          <div class="s-label">Total Job</div>
+          <div class="s-val c-purple small" id="cTotalJob">$0.00</div>
+        </div>
+        <div class="snap-stat">
+          <div class="s-label">Profit</div>
+          <div class="s-val c-teal small" id="cProfit">$0.00</div>
+        </div>
+        <div class="snap-stat">
+          <div class="s-label" id="cCommissionLabel">Commission (15.0%)</div>
+          <div class="s-val c-green small" id="cCommission">$0.00</div>
+        </div>
+      </div>
+      <!-- Labor -->
+      <div class="snap-divider-label">Labor</div>
+      <div class="snap-rows">
+        <div class="snap-row"><span class="sr-key">Tech Pay</span><span class="sr-val" id="cTechPay">$0.00</span></div>
+        <div class="snap-row"><span class="sr-key">Helper Pay</span><span class="sr-val" id="cHelperPay">$0.00</span></div>
+        <div class="snap-row"><span class="sr-key">Prevailing Wage</span><span class="sr-val" id="cPrevPay">$0.00</span></div>
+      </div>
+      <!-- Materials -->
+      <div class="snap-divider-label">Materials</div>
+      <div class="snap-rows">
+        <div class="snap-row"><span class="sr-key">Material Cost</span><span class="sr-val" id="cMatCost">$0.00</span></div>
+        <div class="snap-row"><span class="sr-key">Material Tax</span><span class="sr-val" id="cMatTax">$0.00</span></div>
+        <div class="snap-row sr-big"><span class="sr-key">Total Materials</span><span class="sr-val c-orange" id="cTotalMat">$0.00</span></div>
+      </div>
+      <!-- Other -->
+      <div class="snap-divider-label">Other Charges</div>
+      <div class="snap-rows">
+        <div class="snap-row"><span class="sr-key">TOC</span><span class="sr-val" id="cToc">$0.00</span></div>
+        <div class="snap-row"><span class="sr-key">Permits</span><span class="sr-val" id="cPermits">$0.00</span></div>
+        <div class="snap-row"><span class="sr-key">Equipment</span><span class="sr-val" id="cEquip">$0.00</span></div>
+        <div class="snap-row"><span class="sr-key">Sub 1</span><span class="sr-val" id="cSub1">$0.00</span></div>
+        <div class="snap-row"><span class="sr-key">Sub 2</span><span class="sr-val" id="cSub2">$0.00</span></div>
+        <div class="snap-row"><span class="sr-key">Sub 3</span><span class="sr-val" id="cSub3">$0.00</span></div>
+      </div>
+      <!-- Totals -->
+      <div class="snap-divider-label">Totals</div>
+      <div class="snap-rows">
+        <div class="snap-row sr-big"><span class="sr-key">Subtotal</span><span class="sr-val c-orange" id="cSubtotal">$0.00</span></div>
+        <div class="snap-row sr-big"><span class="sr-key" id="cTotalJobLabel">Total Job (+35%)</span><span class="sr-val c-purple" id="cTotalJob2">$0.00</span></div>
+        <div class="snap-row"><span class="sr-key">Proposal Hours</span><span class="sr-val c-teal" id="cProposal">$0.00</span></div>
+        <div class="snap-row sr-big"><span class="sr-key">Markup</span><span class="sr-val c-yellow" id="cMarkup">35%</span></div>
+      </div>
+      <div class="snap-footer-bar">
+        <span>BREA / ORANGE COUNTY PLUMBING</span>
+        <span>by <strong>ScopeReady</strong></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+
+<div class="page" id="tab-settings">
+  <div class="section-header">
+    <h1>// SETTINGS</h1>
+    <p>Rates & markup defaults</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Fixed Rates</div>
+    <div class="rate-display"><span>Tech Rate</span>$140 / hr</div>
+    <div class="rate-display"><span>Helper Rate</span>$50 / hr</div>
+    <div class="rate-display"><span>Prevailing Wage</span>$185 / hr</div>
+    <div class="rate-display"><span>Proposal Rate</span>$140 / hr</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Company Markup</div>
+    <p class="settings-label">Default is <strong style="color:var(--accent)">35%</strong>. Commission scales with markup automatically (see below). Change and tap <strong style="color:var(--green)">Save</strong> — applies to all future calculations.</p>
+    <div class="field"><label>Markup %</label><div class="suffix-wrap"><input type="number" id="markupInput" placeholder="35" step="0.1" min="0" max="999" oninput="previewCommission()"><span>%</span></div></div>
+    <div class="rate-display" style="margin-top:10px;"><span>Commission at this markup</span><strong id="commissionPreview" style="color:var(--yellow);">15.0%</strong></div>
+    <button class="save-btn" onclick="saveMarkup()">Save Markup</button>
+    <div class="saved-toast" id="savedToast">✓ Markup saved!</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Commission Formula</div>
+    <p class="settings-label">Commission % = (Markup % × 0.6) − 6, floored at 0%.<br><br>Every 1 point of markup moves commission 0.6 points in the same direction. Locked at 35% markup = 15% commission.</p>
+  </div>
+</div>
+
+<script>
+  let markup = parseFloat(localStorage.getItem('markup') || '35');
+  document.getElementById('markupInput').value = markup;
+  document.getElementById('date').valueAsDate = new Date();
+
+  // Commission % = (Markup % × 0.6) − 6, floored at 0. Locked at 35% markup = 15% commission.
+  function getCommissionPct(mkup) {
+    return Math.max(0, (mkup * 0.6) - 6);
+  }
+
+  function previewCommission() {
+    const v = parseFloat(document.getElementById('markupInput').value);
+    const pct = getCommissionPct(isNaN(v) ? 0 : v);
+    document.getElementById('commissionPreview').textContent = pct.toFixed(1) + '%';
+  }
+  previewCommission();
+
+  const tabIds = ['calc','results','card','settings'];
+  const btns = ['btn-calc','btn-results','btn-card','btn-settings'].map(id => document.getElementById(id));
+
+  function showTab(name, idx) {
+    tabIds.forEach(t => document.getElementById('tab-'+t).classList.remove('active'));
+    btns.forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-'+name).classList.add('active');
+    btns[idx].classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function saveMarkup() {
+    const v = parseFloat(document.getElementById('markupInput').value);
+    if (isNaN(v) || v < 0) return;
+    markup = v;
+    localStorage.setItem('markup', markup);
+    const toast = document.getElementById('savedToast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2200);
+  }
+
+  function getVal(id) { return parseFloat(document.getElementById(id).value) || 0; }
+  function fmt(n) { return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+
+  function calculate() {
+    const customerName  = document.getElementById('customerName').value || '—';
+    const invoiceNumber = document.getElementById('invoiceNumber').value || '—';
+    const date          = document.getElementById('date').value;
+    const techHours       = getVal('techHours');
+    const helperHours     = getVal('helperHours');
+    const prevailingHours = getVal('prevailingHours');
+    const proposalHours   = getVal('proposalHours');
+    const materialCost    = getVal('materialCost');
+    const taxRate         = getVal('taxRate');
+    const tocCharge       = getVal('tocCharge');
+    const permits         = getVal('permits');
+    const equipment       = getVal('equipment');
+    const sub1            = getVal('sub1Charge');
+    const sub2            = getVal('sub2Charge');
+    const sub3            = getVal('sub3Charge');
+
+    const techPay       = techHours * 140;
+    const helperPay     = helperHours * 50;
+    const prevailingPay = prevailingHours * 185;
+    const materialTax   = materialCost * (taxRate / 100);
+    const totalMaterial = materialCost + materialTax;
+    const subtotal      = techPay + helperPay + prevailingPay + totalMaterial + tocCharge + permits + equipment + sub1 + sub2 + sub3;
+    const totalJob      = subtotal * (1 + markup / 100);
+    const proposalCost  = proposalHours * 140;
+    const completeTotal = totalJob + proposalCost;
+    const profit         = completeTotal - subtotal - proposalCost;
+    const commissionPct  = getCommissionPct(markup);
+    const commission     = profit * (commissionPct / 100);
+
+    let displayDate = '—';
+    if (date) { const [y,m,d] = date.split('-'); displayDate = `${m}/${d}/${y}`; }
+
+    document.getElementById('badgeInvoice').textContent   = '#' + invoiceNumber;
+    document.getElementById('rCustomer').textContent      = customerName;
+    document.getElementById('rDate').textContent          = displayDate;
+    document.getElementById('rMarkupUsed').textContent    = markup + '%';
+    document.getElementById('rTotalJobLabel').textContent = `Total Job (+${markup}%)`;
+    document.getElementById('rTechPay').textContent       = fmt(techPay);
+    document.getElementById('rHelperPay').textContent     = fmt(helperPay);
+    document.getElementById('rPrevailingPay').textContent = fmt(prevailingPay);
+    document.getElementById('rMaterialCost').textContent  = fmt(materialCost);
+    document.getElementById('rMaterialTax').textContent   = fmt(materialTax);
+    document.getElementById('rTotalMaterial').textContent = fmt(totalMaterial);
+    document.getElementById('rToc').textContent           = fmt(tocCharge);
+    document.getElementById('rPermits').textContent       = fmt(permits);
+    document.getElementById('rEquipment').textContent     = fmt(equipment);
+    document.getElementById('rSub1').textContent          = fmt(sub1);
+    document.getElementById('rSub2').textContent          = fmt(sub2);
+    document.getElementById('rSub3').textContent          = fmt(sub3);
+    document.getElementById('rSubtotal').textContent      = fmt(subtotal);
+    document.getElementById('rTotalJob').textContent      = fmt(totalJob);
+    document.getElementById('rProposalCost').textContent  = fmt(proposalCost);
+    document.getElementById('rCompleteTotal').textContent = fmt(completeTotal);
+    document.getElementById('rProfit').textContent        = fmt(profit);
+    document.getElementById('rCommission').textContent    = fmt(commission);
+    document.getElementById('rCommissionLabel').textContent = `Commission (${commissionPct.toFixed(1)}%)`;
+
+    document.getElementById('resultsSubtitle').textContent = customerName !== '—' ? customerName : 'Latest calculation';
+    document.getElementById('resultsEmpty').style.display   = 'none';
+    document.getElementById('resultsContent').style.display = 'block';
+    populateCard();
+    showTab('results', 1);
+  }
+
+  function resetCalc() { showTab('calc', 0); }
+
+  function goToCard() {
+    populateCard();
+    showTab('card', 2);
+  }
+
+  function populateCard() {
+    const g = id => document.getElementById(id).textContent;
+    document.getElementById('cCustomer').textContent     = g('rCustomer');
+    document.getElementById('cDate').textContent         = g('rDate');
+    document.getElementById('cInvoice').textContent      = g('badgeInvoice');
+    document.getElementById('cCompleteTotal').textContent= g('rCompleteTotal');
+    document.getElementById('cTotalJob').textContent     = g('rTotalJob');
+    document.getElementById('cProfit').textContent       = g('rProfit');
+    document.getElementById('cCommission').textContent   = g('rCommission');
+    document.getElementById('cCommissionLabel').textContent = g('rCommissionLabel');
+    document.getElementById('cTechPay').textContent      = g('rTechPay');
+    document.getElementById('cHelperPay').textContent    = g('rHelperPay');
+    document.getElementById('cPrevPay').textContent      = g('rPrevailingPay');
+    document.getElementById('cMatCost').textContent      = g('rMaterialCost');
+    document.getElementById('cMatTax').textContent       = g('rMaterialTax');
+    document.getElementById('cTotalMat').textContent     = g('rTotalMaterial');
+    document.getElementById('cToc').textContent          = g('rToc');
+    document.getElementById('cPermits').textContent      = g('rPermits');
+    document.getElementById('cEquip').textContent        = g('rEquipment');
+    document.getElementById('cSub1').textContent         = g('rSub1');
+    document.getElementById('cSub2').textContent         = g('rSub2');
+    document.getElementById('cSub3').textContent         = g('rSub3');
+    document.getElementById('cSubtotal').textContent     = g('rSubtotal');
+    document.getElementById('cTotalJob2').textContent    = g('rTotalJob');
+    document.getElementById('cTotalJobLabel').textContent= g('rTotalJobLabel');
+    document.getElementById('cProposal').textContent     = g('rProposalCost');
+    document.getElementById('cMarkup').textContent       = g('rMarkupUsed');
+    document.getElementById('cardEmpty').style.display   = 'none';
+    document.getElementById('cardContent').style.display = 'block';
+  }
+
+  function buildShareText() {
+    const customer  = document.getElementById('rCustomer').textContent;
+    const invoice   = document.getElementById('badgeInvoice').textContent;
+    const date      = document.getElementById('rDate').textContent;
+    const markup    = document.getElementById('rMarkupUsed').textContent;
+    const techPay   = document.getElementById('rTechPay').textContent;
+    const helperPay = document.getElementById('rHelperPay').textContent;
+    const prevPay   = document.getElementById('rPrevailingPay').textContent;
+    const matCost   = document.getElementById('rMaterialCost').textContent;
+    const matTax    = document.getElementById('rMaterialTax').textContent;
+    const totalMat  = document.getElementById('rTotalMaterial').textContent;
+    const toc       = document.getElementById('rToc').textContent;
+    const permits   = document.getElementById('rPermits').textContent;
+    const equip     = document.getElementById('rEquipment').textContent;
+    const sub1      = document.getElementById('rSub1').textContent;
+    const sub2      = document.getElementById('rSub2').textContent;
+    const sub3      = document.getElementById('rSub3').textContent;
+    const subtotal  = document.getElementById('rSubtotal').textContent;
+    const totalJob  = document.getElementById('rTotalJob').textContent;
+    const proposal  = document.getElementById('rProposalCost').textContent;
+    const complete  = document.getElementById('rCompleteTotal').textContent;
+    const profit    = document.getElementById('rProfit').textContent;
+    const commission= document.getElementById('rCommission').textContent;
+    const commLabel = document.getElementById('rCommissionLabel').textContent;
+    const jobLabel  = document.getElementById('rTotalJobLabel').textContent;
+
+    return [
+      'BREA/ORANGE COUNTY PLUMBING, HEATING & AIR',
+      'Job Breakdown Calculator',
+      '─────────────────────────',
+      'Customer:    ' + customer,
+      'Invoice:     ' + invoice,
+      'Date:        ' + date,
+      'Markup:      ' + markup,
+      '─────────────────────────',
+      'LABOR',
+      '  Tech Pay:         ' + techPay,
+      '  Helper Pay:       ' + helperPay,
+      '  Prevailing Wage:  ' + prevPay,
+      'MATERIALS',
+      '  Material Cost:    ' + matCost,
+      '  Material Tax:     ' + matTax,
+      '  Total Materials:  ' + totalMat,
+      'OTHER CHARGES',
+      '  TOC:              ' + toc,
+      '  Permits:          ' + permits,
+      '  Equipment:        ' + equip,
+      '  Sub 1:            ' + sub1,
+      '  Sub 2:            ' + sub2,
+      '  Sub 3:            ' + sub3,
+      '─────────────────────────',
+      '  Subtotal:         ' + subtotal,
+      '  ' + jobLabel + ': ' + totalJob,
+      '  Proposal Hours:   ' + proposal,
+      '  COMPLETE TOTAL:   ' + complete,
+      '─────────────────────────',
+      '  Profit:           ' + profit,
+      '  ' + commLabel + ': ' + commission,
+      '─────────────────────────',
+      'Created by ScopeReady',
+    ].join('\n');
+  }
+
+  function shareResults() {
+    const text = buildShareText();
+    if (navigator.share && window.self === window.top) {
+      navigator.share({ title: 'Job Breakdown - ' + document.getElementById('rCustomer').textContent, text: text })
+        .catch(() => tryClipboard(text));
+      return;
+    }
+    tryClipboard(text);
+  }
+
+  function tryClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        showShareToast('✓ Copied to clipboard! Paste into email or text.');
+      }).catch(() => mailtoFallback(text));
+    } else {
+      mailtoFallback(text);
+    }
+  }
+
+  function mailtoFallback(text) {
+    const subject = encodeURIComponent('Job Breakdown - ' + document.getElementById('rCustomer').textContent);
+    const body = encodeURIComponent(text);
+    window.open('mailto:?subject=' + subject + '&body=' + body);
+  }
+
+  function showShareToast(msg) {
+    let toast = document.getElementById('shareToast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'shareToast';
+      toast.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#22c55e;color:#0f1117;padding:12px 24px;border-radius:99px;font-family:DM Sans,monospace;font-size:14px;font-weight:700;z-index:999;text-align:center;max-width:85vw;box-shadow:0 4px 20px rgba(0,0,0,0.4);';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.style.display = 'block';
+    setTimeout(() => toast.style.display = 'none', 3500);
+  }
+
+
+</script>
+
+<div class="app-footer">
+  Created by <strong>ScopeReady</strong>
+</div>
+</body>
+</html>
