@@ -185,45 +185,62 @@
     .rate-display:last-child { margin-bottom: 0; }
     .rate-display span { color: var(--muted); font-size: 12px; }
 
-```
-.app-footer {
-  text-align: center; padding: 24px 16px 12px; font-size: 12px;
-  color: var(--muted); font-family: 'DM Mono', monospace; letter-spacing: 0.04em;
-}
-.app-footer strong { color: var(--accent); }
+    .app-footer {
+      text-align: center; padding: 24px 16px 12px; font-size: 12px;
+      color: var(--muted); font-family: 'DM Mono', monospace; letter-spacing: 0.04em;
+    }
+    .app-footer strong { color: var(--accent); }
 
-/* ── CARD TAB ── */
-#tab-card { background: var(--bg); padding: 8px; }
-.card-hint { text-align: center; font-size: 10px; color: var(--muted); font-family: 'DM Mono', monospace; letter-spacing: 0.06em; padding: 4px 0 3px; }
-.snap-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; margin: 0 0 10px; overflow: hidden;
-}
-.snap-header { background: #fff; padding: 14px 18px 10px; text-align: center; border-bottom: 3px solid #111; }
-.snap-header img { max-width: 200px; width: 80%; height: auto; display: block; margin: 0 auto; }
-.snap-header-meta { display: flex; justify-content: space-between; align-items: center; padding: 7px 14px 4px; }
-.snap-meta-block { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); line-height: 1.5; }
-.snap-meta-block span { color: var(--text); font-weight: 500; }
-.snap-invoice-badge { font-family: 'DM Mono', monospace; font-size: 11px; background: var(--surface2); border: 1px solid var(--border); padding: 4px 10px; border-radius: 99px; color: var(--muted); align-self: flex-start; }
-.snap-highlights { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border-top: 1px solid var(--border); }
-.snap-stat { background: var(--surface2); padding: 9px 8px; text-align: center; }
-.snap-stat .s-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
-.snap-stat .s-val { font-family: 'DM Mono', monospace; font-size: 17px; font-weight: 500; line-height: 1.1; }
-.snap-stat .s-val.small { font-size: 15px; }
-.snap-divider-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); padding: 6px 14px 2px; }
-.snap-rows { padding: 0 14px 6px; }
-.snap-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid var(--border); font-size: 11px; }
-.snap-row:last-child { border-bottom: none; }
-.snap-row .sr-key { color: var(--muted); font-size: 11px; }
-.snap-row .sr-val { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text); }
-.snap-row.sr-big .sr-key { color: var(--text); font-weight: 700; font-size: 12px; }
-.snap-row.sr-big .sr-val { font-size: 13px; }
-.snap-footer-bar { background: #111; padding: 5px 14px; display: flex; justify-content: space-between; align-items: center; }
-.snap-footer-bar span { font-family: 'DM Mono', monospace; font-size: 10px; color: #666; letter-spacing: 0.06em; }
-.snap-footer-bar strong { color: var(--accent); }
-.card-empty { text-align: center; color: var(--muted); font-size: 14px; padding: 40px 20px; }
-```
+    /* ── CARD TAB ── */
+    #tab-card { background: var(--bg); padding: 8px; }
+    .card-hint { text-align: center; font-size: 10px; color: var(--muted); font-family: 'DM Mono', monospace; letter-spacing: 0.06em; padding: 4px 0 3px; }
+    .snap-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; margin: 0 auto 10px; overflow: hidden;
+    }
+    .snap-header { background: #fff; padding: 14px 18px 10px; text-align: center; border-bottom: 3px solid #111; }
+    .snap-header img { max-width: 200px; width: 80%; height: auto; display: block; margin: 0 auto; }
+    .snap-header-meta { display: flex; justify-content: space-between; align-items: center; padding: 7px 14px 4px; }
+    .snap-meta-block { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); line-height: 1.5; }
+    .snap-meta-block span { color: var(--text); font-weight: 500; }
+    .snap-invoice-badge { font-family: 'DM Mono', monospace; font-size: 11px; background: var(--surface2); border: 1px solid var(--border); padding: 4px 10px; border-radius: 99px; color: var(--muted); align-self: flex-start; }
+    .snap-highlights { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border-top: 1px solid var(--border); }
+    .snap-stat { background: var(--surface2); padding: 9px 8px; text-align: center; }
+    .snap-stat .s-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+    .snap-stat .s-val { font-family: 'DM Mono', monospace; font-size: 17px; font-weight: 500; line-height: 1.1; }
+    .snap-stat .s-val.small { font-size: 15px; }
+    .snap-divider-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); padding: 6px 14px 2px; }
+    .snap-rows { padding: 0 14px 6px; }
+    .snap-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid var(--border); font-size: 11px; }
+    .snap-row:last-child, .snap-row.last-vis { border-bottom: none; }
+    .snap-row .sr-key { color: var(--muted); font-size: 11px; }
+    .snap-row .sr-val { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text); }
+    .snap-row.sr-big .sr-key { color: var(--text); font-weight: 700; font-size: 12px; }
+    .snap-row.sr-big .sr-val { font-size: 13px; }
+    .snap-footer-bar { background: #111; padding: 5px 14px; display: flex; justify-content: space-between; align-items: center; }
+    .snap-footer-bar span { font-family: 'DM Mono', monospace; font-size: 10px; color: #666; letter-spacing: 0.06em; }
+    .snap-footer-bar strong { color: var(--accent); }
+    .card-empty { text-align: center; color: var(--muted); font-size: 14px; padding: 40px 20px; }
 
+    /* ── SHORT SCREENS (Duo front screen) ── */
+    @media (max-height: 760px) {
+      .tab-btn { padding: 10px 6px; }
+      #tab-card { padding: 6px; }
+      .card-hint { font-size: 9px; padding: 2px 0; }
+      .snap-header-meta { padding: 5px 12px 3px; }
+      .snap-meta-block { font-size: 9px; line-height: 1.35; }
+      .snap-invoice-badge { font-size: 10px; padding: 3px 8px; }
+      .snap-stat { padding: 6px 6px; }
+      .snap-stat .s-label { font-size: 7px; margin-bottom: 2px; }
+      .snap-stat .s-val.small { font-size: 14px; }
+      .snap-divider-label { padding: 4px 12px 1px; font-size: 7px; }
+      .snap-rows { padding: 0 12px 3px; }
+      .snap-row { padding: 2px 0; }
+      .snap-row.sr-big .sr-key { font-size: 11px; }
+      .snap-row.sr-big .sr-val { font-size: 12px; }
+      .snap-footer-bar { padding: 4px 12px; }
+      .snap-footer-bar span { font-size: 9px; }
+    }
   </style>
 </head>
 <body>
@@ -347,7 +364,7 @@
 <!-- CARD -->
 
 <div class="page" id="tab-card">
-  <p class="card-hint">SCREENSHOT THIS PAGE · ZOOM IN TO FILL SCREEN</p>
+  <p class="card-hint">SCREENSHOT THIS PAGE · AUTO-FITS YOUR SCREEN</p>
   <div id="cardEmpty" class="card-empty">
     Run a calculation first, then come back here to screenshot your results.
   </div>
@@ -367,7 +384,7 @@
           <div class="s-val c-red small" id="cCompleteTotal">$0.00</div>
         </div>
         <div class="snap-stat">
-          <div class="s-label">Total Job</div>
+          <div class="s-label" id="cStat2Label">Total Job</div>
           <div class="s-val c-purple small" id="cTotalJob">$0.00</div>
         </div>
         <div class="snap-stat">
@@ -472,8 +489,56 @@
     btns.forEach(b => b.classList.remove('active'));
     document.getElementById('tab-'+name).classList.add('active');
     btns[idx].classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (name === 'card') {
+      requestAnimationFrame(() => fitCard(true));
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
+
+  // ── AUTO-FIT CARD TO SCREEN ──
+  // Scales the card so the whole thing fits in one screenshot (front or inside screen).
+  function fitCard(scrollIntoPlace) {
+    const page = document.getElementById('tab-card');
+    if (!page.classList.contains('active')) return;
+    const content = document.getElementById('cardContent');
+    if (content.style.display === 'none') return;
+
+    // Ignore resizes caused by pinch-zoom
+    if (window.visualViewport && window.visualViewport.scale > 1.01) return;
+
+    const card = content.querySelector('.snap-card');
+    const vh = window.innerHeight;
+    const tabH = document.querySelector('.tab-bar').offsetHeight;
+    const hintH = document.querySelector('.card-hint').offsetHeight;
+    const avail = vh - tabH - hintH - 22;
+
+    let z = 1;
+    card.style.zoom = 1;
+    for (let i = 0; i < 4; i++) {
+      const h = card.getBoundingClientRect().height;
+      if (!h) break;
+      const next = Math.max(0.55, Math.min(1, z * (avail / h)));
+      if (Math.abs(next - z) < 0.005) break;
+      z = next;
+      card.style.zoom = z;
+    }
+
+    if (scrollIntoPlace) {
+      // Scroll the logo off so the tab bar sits at the top and the card fills the rest
+      const logoH = document.querySelector('.logo-header').offsetHeight;
+      window.scrollTo(0, logoH);
+    }
+  }
+
+  let fitTimer;
+  function queueFit() {
+    clearTimeout(fitTimer);
+    fitTimer = setTimeout(() => fitCard(true), 150);
+  }
+  window.addEventListener('resize', queueFit);
+  window.addEventListener('orientationchange', queueFit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => fitCard(false));
 
   function saveMarkup() {
     const v = parseFloat(document.getElementById('markupInput').value);
@@ -560,16 +625,47 @@
     showTab('card', 2);
   }
 
+  // Hide $0.00 rows on the card; hide a whole section if every row in it is zero
+  function hideZeroRows() {
+    document.querySelectorAll('#cardContent .snap-rows').forEach(group => {
+      let lastVisible = null;
+      group.querySelectorAll('.snap-row').forEach(row => {
+        row.classList.remove('last-vis');
+        const zero = row.querySelector('.sr-val').textContent.trim() === '$0.00';
+        row.style.display = zero ? 'none' : '';
+        if (!zero) lastVisible = row;
+      });
+      if (lastVisible) lastVisible.classList.add('last-vis');
+      const show = !!lastVisible;
+      group.style.display = show ? '' : 'none';
+      const label = group.previousElementSibling;
+      if (label && label.classList.contains('snap-divider-label')) label.style.display = show ? '' : 'none';
+    });
+  }
+
   function populateCard() {
     const g = id => document.getElementById(id).textContent;
     document.getElementById('cCustomer').textContent     = g('rCustomer');
     document.getElementById('cDate').textContent         = g('rDate');
     document.getElementById('cInvoice').textContent      = g('badgeInvoice');
     document.getElementById('cCompleteTotal').textContent= g('rCompleteTotal');
-    document.getElementById('cTotalJob').textContent     = g('rTotalJob');
     document.getElementById('cProfit').textContent       = g('rProfit');
     document.getElementById('cCommission').textContent   = g('rCommission');
     document.getElementById('cCommissionLabel').textContent = g('rCommissionLabel');
+
+    // Second highlight box: Subtotal when there are no proposal hours (Total Job would just repeat Complete Total)
+    const stat2Label = document.getElementById('cStat2Label');
+    const stat2Val   = document.getElementById('cTotalJob');
+    if (g('rProposalCost') === '$0.00') {
+      stat2Label.textContent = 'Subtotal';
+      stat2Val.textContent   = g('rSubtotal');
+      stat2Val.className     = 's-val c-orange small';
+    } else {
+      stat2Label.textContent = 'Total Job';
+      stat2Val.textContent   = g('rTotalJob');
+      stat2Val.className     = 's-val c-purple small';
+    }
+
     document.getElementById('cTechPay').textContent      = g('rTechPay');
     document.getElementById('cHelperPay').textContent    = g('rHelperPay');
     document.getElementById('cPrevPay').textContent      = g('rPrevailingPay');
@@ -587,6 +683,7 @@
     document.getElementById('cTotalJobLabel').textContent= g('rTotalJobLabel');
     document.getElementById('cProposal').textContent     = g('rProposalCost');
     document.getElementById('cMarkup').textContent       = g('rMarkupUsed');
+    hideZeroRows();
     document.getElementById('cardEmpty').style.display   = 'none';
     document.getElementById('cardContent').style.display = 'block';
   }
